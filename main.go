@@ -41,7 +41,12 @@ func main() {
 	fs := http.FileServer(http.FS(folder))
 	http.Handle("/templates/", fs)
 
-	fmt.Printf("Listening on port :%v\n", portNum)
+	fmt.Printf("Active Port:%v\n", portNum)
+
+	// Health check
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusOK)
+	})
 
 	err := http.ListenAndServe(fmt.Sprintf(":%v", portNum), nil)
 	if err != nil {
